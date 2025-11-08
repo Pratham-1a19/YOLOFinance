@@ -49,7 +49,7 @@ The Finance Portfolio Management System is a full-featured web application desig
 
    ```sh
    cd ../FrontEnd/yoloFinance
-   ng serve
+   npm run dev
    ```
 
 ### 💡 Create your own Google OAuth Client
@@ -67,7 +67,7 @@ This is how you can create your own Google OAuth [Watch This](https://github-pro
 
 ### 🎨 Frontend
 
-- Angular JS
+- React, Material UI
 
 
 ### 🗄️ Database
