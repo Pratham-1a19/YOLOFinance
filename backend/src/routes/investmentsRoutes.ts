@@ -5,6 +5,7 @@ import {
   cancelMF,
   updateMF,
   confirmPayment,
+  fetchUserInvestments
 } from "../controllers/investmentController";
 import { verifyJWT } from "../middleware/auth.middleware";
 
@@ -15,5 +16,6 @@ investmentRoutes.get("/mf-get", verifyJWT, getMFs as any);
 investmentRoutes.post("/mf-cancel", verifyJWT, cancelMF as any);
 investmentRoutes.post("/mf-update", verifyJWT, updateMF as any);
 investmentRoutes.post("/confirm", verifyJWT, confirmPayment as any);
+investmentRoutes.get('/get/:id', verifyJWT, fetchUserInvestments as any)
 
 export default investmentRoutes;

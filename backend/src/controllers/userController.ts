@@ -28,13 +28,13 @@ export async function login(req: AuthRequest, res: Response): Promise<void> {
       httpOnly: false,
       secure: false, // set true in prod with HTTPS
       path: "/",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+      maxAge: 60 * 60 * 1000,
     });
     res.cookie("access_token", accessToken, {
       httpOnly: false,
       secure: false,
       path: "/",
-      maxAge: 24 * 60 * 60 * 1000,
+      maxAge: 60 * 60 * 1000,
     });
 
     res.status(200).json({
@@ -61,13 +61,13 @@ export async function signup(req: Request, res: Response) {
         res
           .cookie("id_token", id_token, {
             httpOnly: false, // prevents JS access
-            maxAge: 7 * 24 * 60 * 60 * 1000,
+            maxAge: 3599 * 1000,
             secure: false,
             path: "/",
           })
           .cookie("access_token", accessToken, {
             httpOnly: false,
-            maxAge: 24 * 60 * 60 * 1000,
+            maxAge: 3599 * 1000,
             secure: false,
             path: "/",
           });
@@ -106,13 +106,13 @@ export async function googleOAuthCallback(req: Request, res: Response) {
       res
         .cookie("id_token", id_token, {
           httpOnly: false,
-          maxAge: 7 * 24 * 60 * 60 * 1000,
+          maxAge: 3599 * 1000,
           secure: false,
           path: "/",
         })
         .cookie("access_token", accessToken, {
           httpOnly: false,
-          maxAge: 24 * 60 * 60 * 1000,
+          maxAge: 3599 * 1000,
           secure: false,
           path: "/",
         });
@@ -132,13 +132,13 @@ export async function googleOAuthCallback(req: Request, res: Response) {
         res
           .cookie("id_token", id_token, {
             httpOnly: false,
-            maxAge: 7 * 24 * 60 * 60 * 1000,
+            maxAge: 3599 * 1000,
             secure: false,
             path: "/",
           })
           .cookie("access_token", accessToken, {
             httpOnly: false,
-            maxAge: 24 * 60 * 60 * 1000,
+            maxAge: 3599 * 1000,
             secure: false,
             path: "/",
           });
@@ -186,20 +186,41 @@ async function getGoogleOauthAccessToken(code: string) {
 
 export async function userLogout(req: Request, res: Response) {
   try {
-    res.clearCookie("id_token", {
-      httpOnly: false, // must match your original cookie
-      secure: false, // match same as when you set it
-      path: "/", // match same path
-      sameSite: "lax", // if you used sameSite when setting
-    }).clearCookie("access_token", {
-      httpOnly: false, // must match your original cookie
-      secure: false, // match same as when you set it
-      path: "/", // match same path
-      sameSite: "lax", // if you used sameSite when setting
-    })
+    res
+      .clearCookie("id_token", {
+        httpOnly: false, // must match your original cookie
+        secure: false, // match same as when you set it
+        path: "/", // match same path
+        sameSite: "lax", // if you used sameSite when setting
+      })
+      .clearCookie("access_token", {
+        httpOnly: false, // must match your original cookie
+        secure: false, // match same as when you set it
+        path: "/", // match same path
+        sameSite: "lax", // if you used sameSite when setting
+      });
     res.status(200).json({ message: "User Logout" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Logout failed" });
   }
+}
+
+export async function fetchUsers(req: AuthRequest, res: Response) {
+  try {
+    const { _id } = req.user;
+    const user = await User.findById(_id).select("connections");
+    const connections = user?.connections || [];
+
+    const users = await Promise.all(
+      connections.map(async (connectionId) => {
+        const u = await User.findById(connectionId).select("name email");
+        return { id: u?._id, name: u?.name, email: u?.email, avatar: u?.avatar };
+      })
+    );
+
+    res
+      .status(200)
+      .send({ message: "Connections Fetched Successfully", data: users });
+  } catch (error) {}
 }

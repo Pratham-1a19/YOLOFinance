@@ -189,3 +189,16 @@ export async function confirmPayment(req: AuthRequest, res: Response) {
     console.log(error);
   }
 }
+
+export async function fetchUserInvestments(req: AuthRequest, res: Response) {
+  const { id } = req.params
+  try {
+    const userInvestments = await UserInvestments.find({userId: id, isCancelled: false});
+    if(!userInvestments) {
+      return res.status(404).send({message: "No investments found"});
+    }
+    res.status(200).send({message: "Investments recieved successfully", data: userInvestments});
+  } catch (error) {
+    console.log(error);
+  }
+}

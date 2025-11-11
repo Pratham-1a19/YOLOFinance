@@ -33,6 +33,7 @@ const UserSchema = new Schema<IUser>({
   id_token: {
     type: String,
   },
+  connections: [{ type: Schema.Types.ObjectId, ref: "User" }],
 });
 
 UserSchema.pre("save", async function (next) {
@@ -49,6 +50,7 @@ UserSchema.methods.generateAccessToken = async function () {
   return jwt.sign(
     {
       _id: this._id,
+      name: this.name,
       email: this.email,
     },
     process.env.CLIENT_SECRET as string,

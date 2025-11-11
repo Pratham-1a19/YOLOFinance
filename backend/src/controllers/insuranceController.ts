@@ -121,3 +121,16 @@ export async function cancelPolicy(req: AuthRequest, res: Response) {
     return res.status(500).json({ success: false, message: error.message });
   }
 }
+
+export async function getInsurance(req: AuthRequest, res: Response) {
+  const { id } = req.params;
+  try {
+    const userInsurance = await Insurance.find({userId: id});
+    if(!userInsurance) {
+      return res.status(404).send({message: "No insurances found"});
+    }
+    res.status(200).send({message: "Insurance fetched successfully", data: userInsurance})
+  } catch (error) {
+    console.log(error);
+  }
+}

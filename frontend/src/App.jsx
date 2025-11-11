@@ -30,6 +30,8 @@ import NotFound from "./NotFound";
 import GovBondsDashboard from "./components/Dashboard/GovBondsDashboard";
 import GovBonds from "./components/Dashboard/GovBonds";
 import SuccessPage from "./components/Home/SuccessPage";
+import InvitePage from "./components/Common/InvitePage";
+import Groups from "./components/Dashboard/Groups";
 
 const App = () => (
   <Router>
@@ -143,6 +145,22 @@ const App = () => (
           }
         />
         <Route path="/success" element={<SuccessPage />} />
+        <Route
+          path="/invite/:token"
+          element={
+            <PrivateRoute>
+              <InvitePage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/groups"
+          element={
+            <PrivateRoute>
+              <Groups/>
+            </PrivateRoute>
+          }
+        />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Chatbot />

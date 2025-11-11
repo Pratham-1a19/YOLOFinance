@@ -124,6 +124,11 @@ const mainListItems = [
         icon: "fa-solid fa-calculator",
         path: "/CalcDashboard",
     },
+    {
+        text: "Groups",
+        icon: "fa-solid fa-user-group",
+        path: "/groups"
+    }
 ];
 
 const secondaryListItems = [

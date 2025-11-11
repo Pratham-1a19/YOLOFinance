@@ -29,15 +29,6 @@ const Drawer = styled(MuiDrawer)({
 });
 
 export default function SideMenu() {
-    const token = Cookies.get("id_token");
-    const [details, setDetails] = useState({});
-
-    useEffect(() => {
-        if (token) {
-            const decoded = jwtDecode(token);
-            setDetails(decoded);
-        }
-    }, [token]); //
     return (
         <Drawer
             variant="permanent"

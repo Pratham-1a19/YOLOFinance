@@ -38,7 +38,6 @@ export default function Header({name}="Home") {
     >
       <NavbarBreadcrumbs navname={name}/>
       <Stack direction="row" sx={{ gap: 1, alignItems: "center" }}>
-        <Search />
         <MenuButton showBadge aria-label="Open notifications">
           <NotificationsRoundedIcon />
         </MenuButton>
