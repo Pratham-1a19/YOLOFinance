@@ -27,7 +27,7 @@ app.use(
     })
 );
 
-const port = 4000;
+const port = process.env.PORT;
 
 // ✅ create reusable transporter object using Gmail + App Password
 const transporter = nodemailer.createTransport({
