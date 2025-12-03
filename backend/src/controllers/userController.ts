@@ -8,8 +8,8 @@ import { AuthRequest } from "../definitions/AuthRequest";
 import { config } from "dotenv";
 config();
 
-const isProduction = process.env.NODE_ENV === "production";
 export async function login(req: AuthRequest, res: Response): Promise<void> {
+  const isProduction = process.env.NODE_ENV === "production";
   const { email, password } = req.body;
   try {
     const user = await User.findOne({ email });
@@ -51,6 +51,7 @@ export async function login(req: AuthRequest, res: Response): Promise<void> {
 }
 
 export async function signup(req: Request, res: Response) {
+  const isProduction = process.env.NODE_ENV === "production";
   const { name, email, username, password } = req.body;
   try {
     const doesExists = await User.findOne({ email });
@@ -88,6 +89,7 @@ export async function googleOAuth(req: Request, res: Response) {
 }
 
 export async function googleOAuthCallback(req: Request, res: Response) {
+  const isProduction = process.env.NODE_ENV === "production";
   const { code } = req.query;
   const response = await getGoogleOauthAccessToken(code as string);
 
@@ -188,19 +190,18 @@ async function getGoogleOauthAccessToken(code: string) {
 }
 
 export async function userLogout(req: Request, res: Response) {
+  const isProduction = process.env.NODE_ENV === "production";
   try {
     res
       .clearCookie("id_token", {
         httpOnly: false, // must match your original cookie
         secure: isProduction, // match same as when you set it
         path: "/", // match same path
-        sameSite: "lax", // if you used sameSite when setting
       })
       .clearCookie("access_token", {
         httpOnly: false, // must match your original cookie
         secure: isProduction, // match same as when you set it
         path: "/", // match same path
-        sameSite: "lax", // if you used sameSite when setting
       });
     res.status(200).json({ message: "User Logout" });
   } catch (error) {
